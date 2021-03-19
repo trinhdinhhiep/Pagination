@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Pagination from "./Pagination/Pagination";
+import Renderdata from "./RenderDada/Renderdata";
 
-function App() {
+export default function App() {
+  const [data, setData] = useState([]);
+  const [dataClick, setDataClick] = useState({
+    currentPage: 1,
+    itemsPerPage: 5,
+  });
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then((response) => response.json())
+      .then((json) => setData(json))
+      .catch((error) => alert(error));
+  }, []);
+  const handleDataClick = (data) => {
+    setDataClick(data);
+    console.log(data);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Renderdata data={dataClick} />
+      <Pagination data={data} handleOnClickPage={handleDataClick} />
     </div>
   );
 }
-
-export default App;
